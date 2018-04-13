@@ -47,9 +47,9 @@ int set_interface_attribs (int fd, int speed, int parity)
 
 int main(int argc, char *argv[])
 {
-	if(argc != 2)
+	if(argc < 2)
 	{
-		printf("Invalid arguments supplied.\n");
+		printf("Port name not specified\n");
 		return -1;
 	}
 
@@ -75,10 +75,15 @@ int main(int argc, char *argv[])
 		printf("Invalid bytes read: %d\n", n);
 		return -1;
 	}
-	//unsigned long left = buf[12] | (buf[11] << 8) | (buf[10] << 16) | (buf[9] << 24);
-	//unsigned long right = buf[16] | (buf[15] << 8) | (buf[14] << 16) | (buf[13] << 24);
-	unsigned long average = buf[28] | (buf[27] << 8) | (buf[26] << 16) | (buf[25] << 24);
-	printf("%lu", average);
+	
+	if (argc == 2) {
+		unsigned long average = buf[28] | (buf[27] << 8) | (buf[26] << 16) | (buf[25] << 24);
+		printf("%lu", average);
+	} else {
+		unsigned long left = buf[12] | (buf[11] << 8) | (buf[10] << 16) | (buf[9] << 24);
+		unsigned long right = buf[16] | (buf[15] << 8) | (buf[14] << 16) | (buf[13] << 24);
+		printf("%lu", (left+right)/2);
+	}
 
 	return 0;
 }
